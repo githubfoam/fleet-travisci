@@ -4,7 +4,7 @@ language: generic
 fleet_win_before_install_tasks : &fleet_win_before_install_tasks
       before_install:
         # - choco install python --version 3.8.1
-        - choco install python --version ${PYTHON_WIN_HOST:0:1:2}
+        - choco install python --version ${PYTHON_WIN_HOST:0:1}
         - python -m pip install --upgrade pip
         # - pip install --upgrade pytest
         # - pip install codecov
