@@ -1,11 +1,11 @@
 ---
 language: generic
-  
+
 fleet_before_install_tasks : &fleet_before_install_tasks
       before_install:
         - python --version
         - pip install virtualenv
-        - virtualenv -p $(PYTHON_VENV) ~venv
+        - virtualenv -python=$PYTHON_VENV ~venv
         - source ~venv/bin/activate
 fleet_script_tasks : &fleet_script_tasks
       script:
