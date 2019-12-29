@@ -1,13 +1,27 @@
 ---
+language: generic
+
+fleet_win_before_install_tasks : &fleet_win_before_install_tasks
+      before_install:
+        - choco install python --version ${PYTHON_WIN_HOST}
+        - python -m pip install --upgrade pip
+        - pip install virtualenv
+        - virtualenv $HOME/venv
+        - source $HOME/venv/Scripts/activate
+
+fleet_before_install_tasks : &fleet_before_install_tasks
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p python${PYTHON:0:1} venv
+        - source venv/bin/activate
 
 fleet_script_tasks : &fleet_script_tasks
       script:
         - python --version
+        - pip list
+
 fleet_install_tasks : &fleet_install_tasks
       install:
-        - pip install -U pip
-        - pip install -U pytest
-        - pip install codecov
         - pip install -r requirements.txt
 
 matrix:
@@ -18,10 +32,8 @@ matrix:
       dist: bionic
       language: python
       python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
+      env: PYTHON_VENV= 2.7
+      <<: *fleet_before_install_tasks
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       after_success:
@@ -31,10 +43,8 @@ matrix:
       dist: xenial
       language: python
       python: 2.7
-      before_install:
-        - pip install virtualenv
-        - virtualenv -p $(which python2) ~venvpy2
-        - source ~venvpy2/bin/activate
+      env: PYTHON_VENV= 2.7
+      <<: *fleet_before_install_tasks
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       after_success:
@@ -42,12 +52,10 @@ matrix:
 
     - name: "Python 2.7.17 on macOS xcode10.2"
       os: osx
-      osx_image: xcode10.2  # travis-ci-macos10.14-xcode10.2-19-1573099784 (via amqp)
+      osx_image: xcode10.2
       language: shell
-      before_install:
-        - pip install virtualenv
-        - virtualenv -p $(which python2) ~venvpy2
-        - source ~venvpy2/bin/activate
+      env: PYTHON_VENV= 2.7
+      <<: *fleet_before_install_tasks
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       after_success:
@@ -55,12 +63,10 @@ matrix:
 
     - name: "Python 3.7.5 on macOS xcode10.2"
       os: osx
-      osx_image: xcode10.2  # travis-ci-macos10.14-xcode10.2-19-1573099784 (via amqp)
+      osx_image: xcode10.2
       language: shell
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
+      env: PYTHON_VENV= 2.7
+      <<: *fleet_before_install_tasks
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       after_success:
@@ -68,30 +74,23 @@ matrix:
 
     - name: "Python 3.7.5 on macOS xcode9.4 "
       os: osx
-      osx_image: xcode9.4  # travis-ci-macos10.13-xcode9.4.1-19-1576204381
-      language: shell  # 'language: python' is an error on Travis CI macOS
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
+      osx_image: xcode9.4  
+      language: shell
+      env: PYTHON_VENV= 2.7
+      <<: *fleet_before_install_tasks
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       after_success:
         - deactivate
 
     - name: "Python 3.8 on Windows"
-      os: windows           # travis-ci-windows-1803-containers-1569974367-710c8b1d
+      os: windows
       language: shell
       env:
         - PATH=/c/Python38:/c/Python38/Scripts:$PATH
-      before_install:
-        - choco install python --version 3.8.1
-        - python -m pip install --upgrade pip
-        - pip3 install --upgrade pytest
-        - pip3 install codecov
-        - pip install virtualenv
-        - virtualenv $HOME/venv
-        - source $HOME/venv/Scripts/activate
+        - PYTHON_WIN_HOST=3.8.1
+        - PYTHON_VENV=2.7
+      <<: *fleet_win_before_install_tasks
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       after_success:
@@ -100,12 +99,11 @@ matrix:
     - name: "Python 3.7 on Windows"
       os: windows
       language: shell
-      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-      before_install:
-        - choco install python --version 3.7.3
-        - python -m pip install virtualenv
-        - virtualenv $HOME/venv
-        - source $HOME/venv/Scripts/activate
+      env:
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        - PYTHON_WIN_HOST=3.7.3
+        - PYTHON_VENV=2.7
+      <<: *fleet_win_before_install_tasks
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       after_success:
