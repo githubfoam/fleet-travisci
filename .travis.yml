@@ -3,17 +3,17 @@ language: generic
 
 fleet_win_before_install_tasks : &fleet_win_before_install_tasks
       before_install:
-        - choco install python --version 3.8.1
+        # - choco install python --version 3.8.1
+        - choco install python --version ${PYTHON_WIN_HOST:0:1:2}
         - python -m pip install --upgrade pip
-        - pip install --upgrade pytest
-        - pip install codecov
+        # - pip install --upgrade pytest
+        # - pip install codecov
         - pip install virtualenv
         - virtualenv $HOME/venv
         - source $HOME/venv/Scripts/activate
 
 fleet_before_install_tasks : &fleet_before_install_tasks
       before_install:
-        - python --version
         - pip install virtualenv
         - virtualenv -p python${PYTHON:0:1} venv
         - source venv/bin/activate
@@ -92,6 +92,7 @@ matrix:
       language: shell
       env:
         - PATH=/c/Python38:/c/Python38/Scripts:$PATH
+        - PYTHON_WIN_HOST= 3.8.1
         - PYTHON_VENV= 2.7
       <<: *fleet_win_before_install_tasks
       # before_install:
