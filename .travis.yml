@@ -107,17 +107,22 @@ matrix:
       <<: *fleet_script_tasks
       after_success:
         - deactivate
-    #
-    # - name: "Python 3.7 on Windows"
-    #   os: windows
-    #   language: shell
-    #   env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    #   before_install:
-    #     - choco install python --version 3.7.3
-    #     - python -m pip install virtualenv
-    #     - virtualenv $HOME/venv
-    #     - source $HOME/venv/Scripts/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   after_success:
-    #     - deactivate
+
+    - name: "Python 3.7 on Windows"
+      os: windows
+      language: shell
+      env:
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        - PYTHON_WIN_HOST=3.7.3
+        - PYTHON_VENV=2.7
+      <<: *fleet_win_before_install_tasks
+      # env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+      # before_install:
+      #   - choco install python --version 3.7.3
+      #   - python -m pip install virtualenv
+      #   - virtualenv $HOME/venv
+      #   - source $HOME/venv/Scripts/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      after_success:
+        - deactivate
