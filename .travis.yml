@@ -36,19 +36,20 @@ matrix:
       after_success:
         - deactivate
 
-    # - name: "Python 2.7 on xenial"
-    #   dist: xenial
-    #   language: python
-    #   python: 2.7
-    #   before_install:
-    #     - pip install virtualenv
-    #     - virtualenv -p $(which python2) ~venvpy2
-    #     - source ~venvpy2/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   after_success:
-    #     - deactivate
-    #
+    - name: "Python 2.7 on xenial"
+      dist: xenial
+      language: python
+      python: 2.7
+      env: PYTHON_VENV= 2.7
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p $(which python2) ~venvpy2
+        - source ~venvpy2/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      after_success:
+        - deactivate
+
     # - name: "Python 2.7.17 on macOS xcode10.2"
     #   os: osx
     #   osx_image: xcode10.2  # travis-ci-macos10.14-xcode10.2-19-1573099784 (via amqp)
