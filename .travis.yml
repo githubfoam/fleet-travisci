@@ -5,7 +5,7 @@ fleet_before_install_tasks : &fleet_before_install_tasks
       before_install:
         - python --version
         - pip install virtualenv
-        - virtualenv -python=$PYTHON_VENV ~venv
+        - virtualenv -p python${PYTHON:0:1} ~venv
         - source ~venv/bin/activate
 fleet_script_tasks : &fleet_script_tasks
       script:
@@ -25,7 +25,7 @@ matrix:
       dist: bionic
       language: python
       python: 3.7
-      PYTHON_VENV: 2.7
+      env: PYTHON_VENV= 2.7
       <<: *fleet_before_install_tasks
       # before_install:
       #   - pip3 install virtualenv
