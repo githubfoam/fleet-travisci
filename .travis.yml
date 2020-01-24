@@ -1,7 +1,5 @@
 ---
 language: generic
-# service:
-#   - docker
 
 fleet_win_before_install_tasks : &fleet_win_before_install_tasks
       before_install:
@@ -27,7 +25,7 @@ fleet_script_tasks : &fleet_script_tasks
         - pip list
         - hpccm --recipe recipes/examples/basic.py --format singularity > Singularity
         - hpccm --recipe recipes/examples/basic.py --format docker > Docker
-        - build . -t hpccmtest
+        # - build . -t hpccmtest
 matrix:
   fast_finish: true
   include:
@@ -35,6 +33,8 @@ matrix:
     - name: "Python 3.7 on bionic"
       dist: bionic
       language: python
+      service:
+        - docker
       python: 3.7
       env: PYTHON_VENV= 2.7
       <<: *fleet_before_install_tasks
@@ -43,43 +43,45 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "Python 2.7 on xenial"
-      dist: xenial
-      language: python
-      python: 2.7
-      env: PYTHON_VENV= 2.7
-      <<: *fleet_before_install_tasks
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      after_success:
-        - deactivate
-
-    - name: "Python 2.7.17 on macOS xcode10.2"
-      os: osx
-      osx_image: xcode10.2
-      language: shell
-      env: PYTHON_VENV= 2.7
-      <<: *fleet_before_install_tasks
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      after_success:
-        - deactivate
-
-    - name: "Python 3.7.5 on macOS xcode10.2"
-      os: osx
-      osx_image: xcode10.2
-      language: shell
-      env: PYTHON_VENV= 2.7
-      <<: *fleet_before_install_tasks
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      after_success:
-        - deactivate
+    # - name: "Python 2.7 on xenial"
+    #   dist: xenial
+    #   language: python
+    #   python: 2.7
+    #   env: PYTHON_VENV= 2.7
+    #   <<: *fleet_before_install_tasks
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   after_success:
+    #     - deactivate
+    #
+    # - name: "Python 2.7.17 on macOS xcode10.2"
+    #   os: osx
+    #   osx_image: xcode10.2
+    #   language: shell
+    #   env: PYTHON_VENV= 2.7
+    #   <<: *fleet_before_install_tasks
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   after_success:
+    #     - deactivate
+    #
+    # - name: "Python 3.7.5 on macOS xcode10.2"
+    #   os: osx
+    #   osx_image: xcode10.2
+    #   language: shell
+    #   env: PYTHON_VENV= 2.7
+    #   <<: *fleet_before_install_tasks
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   after_success:
+    #     - deactivate
 
     - name: "Python 3.7.5 on macOS xcode9.4 "
       os: osx
       osx_image: xcode9.4
       language: shell
+      service:
+      - docker
       env: PYTHON_VENV= 2.7
       <<: *fleet_before_install_tasks
       <<: *fleet_install_tasks
@@ -87,22 +89,24 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "Python 3.8 on Windows"
-      os: windows
-      language: shell
-      env:
-        - PATH=/c/Python38:/c/Python38/Scripts:$PATH
-        - PYTHON_WIN_HOST=3.8.1
-        - PYTHON_VENV=2.7
-      <<: *fleet_win_before_install_tasks
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      after_success:
-        - deactivate
+    # - name: "Python 3.8 on Windows"
+    #   os: windows
+    #   language: shell
+    #   env:
+    #     - PATH=/c/Python38:/c/Python38/Scripts:$PATH
+    #     - PYTHON_WIN_HOST=3.8.1
+    #     - PYTHON_VENV=2.7
+    #   <<: *fleet_win_before_install_tasks
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   after_success:
+    #     - deactivate
 
     - name: "Python 3.7 on Windows"
       os: windows
       language: shell
+      service:
+      - docker
       env:
         - PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - PYTHON_WIN_HOST=3.7.3
