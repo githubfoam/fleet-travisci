@@ -23,10 +23,10 @@ fleet_script_tasks : &fleet_script_tasks
       script:
         - python --version
         - pip list
-        - hpccm --recipe recipes/basic.py --format singularity > Singularity
-        - hpccm --recipe recipes/basic.py --format docker > Docker
-        - docker version
-        - docker build . -t hpccmtest
+        - hpccm --recipe recipes/basic.py --format singularity > Singularity.basic
+        - hpccm --recipe recipes/basic.py --format docker > Dockerfile.basic
+        - docker build . -t basic:docker --file Dockerfile.basic
+        - docker images ls
 matrix:
   fast_finish: true
   include:
