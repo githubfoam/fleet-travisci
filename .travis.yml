@@ -15,14 +15,15 @@ fleet_before_install_tasks : &fleet_before_install_tasks
         - virtualenv -p python${PYTHON:0:1} venv
         - source venv/bin/activate
 
+fleet_install_tasks : &fleet_install_tasks
+      install:
+        - pip install -r requirements.txt
+        
 fleet_script_tasks : &fleet_script_tasks
       script:
         - python --version
         - pip list
 
-fleet_install_tasks : &fleet_install_tasks
-      install:
-        - pip install -r requirements.txt
 
 matrix:
   fast_finish: true
@@ -74,7 +75,7 @@ matrix:
 
     - name: "Python 3.7.5 on macOS xcode9.4 "
       os: osx
-      osx_image: xcode9.4  
+      osx_image: xcode9.4
       language: shell
       env: PYTHON_VENV= 2.7
       <<: *fleet_before_install_tasks
