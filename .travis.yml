@@ -1,5 +1,7 @@
 ---
 language: generic
+# service:
+#   - docker
 
 fleet_win_before_install_tasks : &fleet_win_before_install_tasks
       before_install:
@@ -18,13 +20,14 @@ fleet_before_install_tasks : &fleet_before_install_tasks
 fleet_install_tasks : &fleet_install_tasks
       install:
         - pip install -r requirements.txt
-        
+
 fleet_script_tasks : &fleet_script_tasks
       script:
         - python --version
         - pip list
-
-
+        - hpccm --recipe recipes/examples/basic.py --format singularity > Singularity
+        - hpccm --recipe recipes/examples/basic.py --format docker > Docker
+        - build . -t hpccmtest
 matrix:
   fast_finish: true
   include:
