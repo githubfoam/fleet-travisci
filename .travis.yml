@@ -23,8 +23,9 @@ fleet_script_tasks : &fleet_script_tasks
       script:
         - python --version
         - pip list
-        - hpccm --recipe recipes/examples/basic.py --format singularity > Singularity
-        - hpccm --recipe recipes/examples/basic.py --format docker > Docker
+        - hpccm --recipe recipes/basic.py --format singularity > Singularity
+        - hpccm --recipe recipes/basic.py --format docker > Docker
+        - docker version
         # - build . -t hpccmtest
 matrix:
   fast_finish: true
